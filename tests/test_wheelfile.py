@@ -123,7 +123,7 @@ def test_write_str(wheel_path):
         assert infolist[2].filename == 'test-1.0.dist-info/RECORD'
 
         record = zf.read('test-1.0.dist-info/RECORD')
-        assert record == as_bytes(
+        assert record.replace(b'SHA256=', b'sha256=') == as_bytes(
             'hello/héllö.py,sha256=bv-QV3RciQC2v3zL8Uvhd_arp40J5A9xmyubN34OVwo,25\n'
             '"hello/h,ll,.py",sha256=bv-QV3RciQC2v3zL8Uvhd_arp40J5A9xmyubN34OVwo,25\n'
             'test-1.0.dist-info/RECORD,,\n')

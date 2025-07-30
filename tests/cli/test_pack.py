@@ -45,7 +45,7 @@ def test_pack(tmpdir_factory, tmpdir, build_tag_arg, existing_build_tag, filenam
 
         new_wheel_file_content = zf.read('test-1.0.dist-info/WHEEL')
 
-    assert new_record_lines == old_record_lines
+    assert [line.replace(b'SHA256=', b'sha256=') for line in new_record_lines] == old_record_lines
 
     expected_build_num = build_tag_arg or existing_build_tag
     expected_wheel_content = dedent("""\

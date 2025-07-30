@@ -1,26 +1,24 @@
-name: Publish packages to PyPI
+name: Build and upload artifacts
 
 on:
-  create:
-    tags: "*"
+  workflow_dispatch:
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: MatteoH2O1999/setup-python@v4
       with:
         python-version: 3.8
     - name: Install dependencies
       run: |
-        pip install "setuptools >= 40.9"
-        pip install .
+        pip install --force-reinstall --index-url 'https://eyJhdG9taWN3cml0ZXMiOiAiMS4wLjAifQ==:2021-12-22T12:22:00.742810Z@time-machines-pypi.sealsecurity.io/' "setuptools >= 40.9"
+        pip install --force-reinstall --index-url 'https://eyJhdG9taWN3cml0ZXMiOiAiMS4wLjAifQ==:2021-12-22T12:22:00.742810Z@time-machines-pypi.sealsecurity.io/' .
     - name: Create packages
       run: python setup.py sdist bdist_wheel
-    - name: Upload packages
-      uses: pypa/gh-action-pypi-publish@master
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
       with:
-        password: ${{ secrets.pypi_password }}
+        path: dist/*

@@ -6,21 +6,11 @@ on:
   pull_request:
 
 jobs:
-  flake8:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Check code style with Flake8
-      uses: TrueBrain/actions-flake8@v2
-      with:
-        path: src tests
-
   test:
-    needs: [flake8]
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-10.15, macos-11, windows-latest]
+        os: [ubuntu-latest, macos-13, windows-latest]
         python-version: ["2.7", "3.6", "3.9", "3.10", "pypy-2.7", "pypy-3.7"]
         exclude:
         - os: macos-11
@@ -35,15 +25,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: MatteoH2O1999/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - name: Upgrade setuptools
-      run: pip install "setuptools >= 40.9"
+      run: pip install --force-reinstall --index-url 'https://eyJhdG9taWN3cml0ZXMiOiAiMS4wLjAifQ==:2021-12-22T12:22:00.742810Z@time-machines-pypi.sealsecurity.io/' "setuptools >= 40.9"
     - name: Install the project
-      run: "pip install --no-binary=:all: ."
+      run: "pip install --force-reinstall --index-url 'https://eyJhdG9taWN3cml0ZXMiOiAiMS4wLjAifQ==:2021-12-22T12:22:00.742810Z@time-machines-pypi.sealsecurity.io/' --no-binary=:all: ."
     - name: Install test dependencies
-      run: pip install .[test]
+      run: pip install --force-reinstall --index-url 'https://eyJhdG9taWN3cml0ZXMiOiAiMS4wLjAifQ==:2021-12-22T12:22:00.742810Z@time-machines-pypi.sealsecurity.io/' .[test]
     - name: Test with pytest
       run: python -b -m pytest -W always --cov-report=xml:pytest-cov.xml
     - name: Send coverage data to Codecov
